@@ -1,12 +1,14 @@
-import { RequestConfig } from './types'
+import { RequestConfig, ResponsePromise, Response } from './types'
 import xhr from './xhr'
 import { buildURL } from './helpers/url'
-import { transformRequest } from './helpers/data'
+import { transformRequest, transformResponse } from './helpers/data'
 import { processHeaders } from './helpers/headers'
 
-function request(config: RequestConfig): void {
+function request(config: RequestConfig): ResponsePromise {
   processConfig(config)
-  xhr(config)
+  return xhr(config).then(res => {
+    return transformResponseData(res)
+  })
 }
 
 function processConfig(config: RequestConfig): void {
@@ -22,6 +24,11 @@ function transformURL(config: RequestConfig): string {
 
 function transformRequestData(config: RequestConfig): any {
   return transformRequest(config.data)
+}
+
+function transformResponseData(res: Response): any {
+  res.data = transformResponse(res.data)
+  return res
 }
 
 function transformHeaders(config: RequestConfig): any {

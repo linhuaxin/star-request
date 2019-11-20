@@ -6,3 +6,12 @@ export function transformRequest(data: any): any {
   }
   return data
 }
+
+export function transformResponse(data: any): any {
+  try {
+    data = JSON.parse(data)
+  } catch (e) {
+    // do nothing
+  }
+  return data
+}
