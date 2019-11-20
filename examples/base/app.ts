@@ -116,6 +116,7 @@ axios({
   method: 'post',
   url: '/base/post',
   responseType: 'json',
+  timeout: 1,
   data: {
     a: 3,
     b: 4
@@ -123,4 +124,8 @@ axios({
 })
 .then((res) => {
   console.log(res)
+})
+  .catch((e)=> {
+  debugger
+  console.log(e)
 })

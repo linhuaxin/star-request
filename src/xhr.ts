@@ -2,12 +2,15 @@ import { RequestConfig, ResponsePromise, Response } from './types'
 import { parseHeaders } from './helpers/headers'
 
 export default function xhr(config: RequestConfig): ResponsePromise {
-  const { url, method = 'get', data = null, headers, responseType } = config
-  const request = new XMLHttpRequest()
+  return new Promise((resolve, reject) => {
+    const { url, method = 'get', data = null, headers, responseType, timeout } = config
+    const request = new XMLHttpRequest()
 
-  return new Promise(resolve => {
     if (responseType) {
       request.responseType = responseType
+    }
+    if (timeout) {
+      request.timeout = timeout
     }
 
     request.open(method.toUpperCase(), url, true)
@@ -29,6 +32,14 @@ export default function xhr(config: RequestConfig): ResponsePromise {
         request
       }
       resolve(response)
+    }
+
+    request.onerror = function() {
+      reject(new Error('Network Error'))
+    }
+
+    request.ontimeout = function() {
+      reject(new Error(`Timeout of ${timeout}ms exceeded`))
     }
 
     Object.keys(headers).forEach(name => {
