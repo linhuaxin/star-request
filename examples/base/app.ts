@@ -126,6 +126,5 @@ axios({
   console.log(res)
 })
   .catch((e)=> {
-  debugger
   console.log(e)
 })

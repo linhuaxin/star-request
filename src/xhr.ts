@@ -20,6 +20,10 @@ export default function xhr(config: RequestConfig): ResponsePromise {
         return
       }
 
+      if (request.status === 0) {
+        return
+      }
+
       const responseHeaders = parseHeaders(request.getAllResponseHeaders())
       const responseData =
         responseType && responseType !== 'text' ? request.response : request.responseText
@@ -31,7 +35,7 @@ export default function xhr(config: RequestConfig): ResponsePromise {
         config,
         request
       }
-      resolve(response)
+      handleResponse(response)
     }
 
     request.onerror = function() {
@@ -51,5 +55,13 @@ export default function xhr(config: RequestConfig): ResponsePromise {
     })
 
     request.send(data)
+
+    function handleResponse(response: Response): void {
+      if (response.status >= 200 && response.status < 300) {
+        resolve(response)
+      } else {
+        reject(new Error(`Request failed with status code ${response.status}`))
+      }
+    }
   })
 }
