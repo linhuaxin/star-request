@@ -1,4 +1,5 @@
-import axios  from '../../src/index'
+import axios from '../../src/index'
+import { StarError } from '../../src/types'
 
 axios({
   method: 'get',
@@ -35,6 +36,10 @@ axios({
   timeout: 2000
 }).then((res) => {
   console.log(res)
-}).catch((e) => {
+}).catch((e: StarError) => {
   console.log(e.message)
+  console.log(e.config)
+  console.log(e.code)
+  console.log(e.request)
+  console.log(e.isStarError)
 })

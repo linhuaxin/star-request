@@ -1,4 +1,4 @@
-import { RequestConfig, ResponsePromise, Response } from './types'
+import { RequestConfig, ResponsePromise, StarResponse } from './types'
 import xhr from './xhr'
 import { buildURL } from './helpers/url'
 import { transformRequest, transformResponse } from './helpers/data'
@@ -26,7 +26,7 @@ function transformRequestData(config: RequestConfig): any {
   return transformRequest(config.data)
 }
 
-function transformResponseData(res: Response): any {
+function transformResponseData(res: StarResponse): any {
   res.data = transformResponse(res.data)
   return res
 }

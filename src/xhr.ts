@@ -1,5 +1,6 @@
-import { RequestConfig, ResponsePromise, Response } from './types'
+import { RequestConfig, ResponsePromise, StarResponse } from './types'
 import { parseHeaders } from './helpers/headers'
+import { createError } from './helpers/error'
 
 export default function xhr(config: RequestConfig): ResponsePromise {
   return new Promise((resolve, reject) => {
@@ -27,7 +28,7 @@ export default function xhr(config: RequestConfig): ResponsePromise {
       const responseHeaders = parseHeaders(request.getAllResponseHeaders())
       const responseData =
         responseType && responseType !== 'text' ? request.response : request.responseText
-      const response: Response = {
+      const response: StarResponse = {
         data: responseData,
         status: request.status,
         statusText: request.statusText,
@@ -39,11 +40,11 @@ export default function xhr(config: RequestConfig): ResponsePromise {
     }
 
     request.onerror = function() {
-      reject(new Error('Network Error'))
+      reject(createError('Network Error', config, null, request))
     }
 
     request.ontimeout = function() {
-      reject(new Error(`Timeout of ${timeout}ms exceeded`))
+      reject(createError(`Timeout of ${timeout}ms exceeded`, config, 'ECONNABORTED', request))
     }
 
     Object.keys(headers).forEach(name => {
@@ -56,11 +57,19 @@ export default function xhr(config: RequestConfig): ResponsePromise {
 
     request.send(data)
 
-    function handleResponse(response: Response): void {
+    function handleResponse(response: StarResponse): void {
       if (response.status >= 200 && response.status < 300) {
         resolve(response)
       } else {
-        reject(new Error(`Request failed with status code ${response.status}`))
+        reject(
+          createError(
+            `Request failed with status code ${response.status}`,
+            config,
+            null,
+            request,
+            response
+          )
+        )
       }
     }
   })
