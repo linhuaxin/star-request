@@ -1,8 +1,8 @@
-import { RequestConfig, ResponsePromise, StarResponse } from './types'
+import { StarRequestConfig, StarPromise, StarResponse } from './types'
 import { parseHeaders } from './helpers/headers'
 import { createError } from './helpers/error'
 
-export default function xhr(config: RequestConfig): ResponsePromise {
+export default function xhr(config: StarRequestConfig): StarPromise {
   return new Promise((resolve, reject) => {
     const { url, method = 'get', data = null, headers, responseType, timeout } = config
     const request = new XMLHttpRequest()

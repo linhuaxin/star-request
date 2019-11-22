@@ -1,15 +1,15 @@
-import { RequestConfig, StarResponse } from '../types'
+import { StarRequestConfig, StarResponse } from '../types'
 
 export class StarError extends Error {
   isStarError: boolean
-  config: RequestConfig
+  config: StarRequestConfig
   code?: string | null
   request?: any
   response?: StarResponse
 
   constructor(
     message: string,
-    config: RequestConfig,
+    config: StarRequestConfig,
     code?: string | null,
     request?: any,
     response?: StarResponse
@@ -28,7 +28,7 @@ export class StarError extends Error {
 
 export function createError(
   message: string,
-  config: RequestConfig,
+  config: StarRequestConfig,
   code?: string | null,
   request?: any,
   response?: StarResponse

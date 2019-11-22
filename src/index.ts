@@ -1,28 +1,28 @@
-import { RequestConfig, ResponsePromise, StarResponse } from './types'
+import { StarRequestConfig, StarPromise, StarResponse } from './types'
 import xhr from './xhr'
 import { buildURL } from './helpers/url'
 import { transformRequest, transformResponse } from './helpers/data'
 import { processHeaders } from './helpers/headers'
 
-function request(config: RequestConfig): ResponsePromise {
+function request(config: StarRequestConfig): StarPromise {
   processConfig(config)
   return xhr(config).then(res => {
     return transformResponseData(res)
   })
 }
 
-function processConfig(config: RequestConfig): void {
+function processConfig(config: StarRequestConfig): void {
   config.url = transformURL(config)
   config.headers = transformHeaders(config)
   config.data = transformRequestData(config)
 }
 
-function transformURL(config: RequestConfig): string {
+function transformURL(config: StarRequestConfig): string {
   const { url, params } = config
   return buildURL(url, params)
 }
 
-function transformRequestData(config: RequestConfig): any {
+function transformRequestData(config: StarRequestConfig): any {
   return transformRequest(config.data)
 }
 
@@ -31,7 +31,7 @@ function transformResponseData(res: StarResponse): any {
   return res
 }
 
-function transformHeaders(config: RequestConfig): any {
+function transformHeaders(config: StarRequestConfig): any {
   let { headers = {}, data } = config
   return processHeaders(headers, data)
 }

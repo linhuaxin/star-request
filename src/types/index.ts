@@ -14,7 +14,7 @@ type Method =
   | 'patch'
   | 'PATCH'
 
-export interface RequestConfig {
+export interface StarRequestConfig {
   url: string
   method?: Method
   data?: any
@@ -29,16 +29,34 @@ export interface StarResponse {
   status: number
   statusText: string
   headers: any
-  config: RequestConfig
+  config: StarRequestConfig
   request: any
 }
 
+export interface StarPromise extends Promise<StarResponse> {}
+
 export interface StarError extends Error {
   isStarError: boolean
-  config: RequestConfig
+  config: StarRequestConfig
   code?: string
   request?: any
   response?: StarResponse
 }
 
-export interface ResponsePromise extends Promise<StarResponse> {}
+export interface Star {
+  request(config: StarRequestConfig): StarPromise
+
+  get(url: string, config?: StarRequestConfig): StarPromise
+
+  delete(url: string, config?: StarRequestConfig): StarPromise
+
+  head(url: string, config?: StarRequestConfig): StarPromise
+
+  options(url: string, config?: StarRequestConfig): StarPromise
+
+  post(url: string, data?: any, config?: StarRequestConfig): StarPromise
+
+  put(url: string, data?: any, config?: StarRequestConfig): StarPromise
+
+  patch(url: string, data?: any, config?: StarRequestConfig): StarPromise
+}
