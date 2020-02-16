@@ -24,8 +24,8 @@ export interface StarRequestConfig {
   timeout?: number
 }
 
-export interface StarResponse {
-  data: any
+export interface StarResponse<T = any> {
+  data: T
   status: number
   statusText: string
   headers: any
@@ -33,7 +33,7 @@ export interface StarResponse {
   request: any
 }
 
-export interface StarPromise extends Promise<StarResponse> {}
+export interface StarPromise<T = any> extends Promise<StarResponse<T>> {}
 
 export interface StarError extends Error {
   isStarError: boolean
